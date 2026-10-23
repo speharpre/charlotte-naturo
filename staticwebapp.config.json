@@ -1,0 +1,29 @@
+{
+  "globalHeaders": {
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' https://fonts.googleapis.com; script-src 'self'; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' mailto:; object-src 'none'"
+  },
+  "routes": [
+    { "route": "/README.md", "statusCode": 404 },
+    { "route": "/.claude/*", "statusCode": 404 },
+
+    { "route": "/home-1", "redirect": "/#naturopathie", "statusCode": 301 },
+    { "route": "/home-2", "redirect": "/#consultation", "statusCode": 301 },
+    { "route": "/blank-1", "redirect": "/#contact", "statusCode": 301 },
+    { "route": "/blog", "redirect": "/#contact", "statusCode": 301 },
+
+    { "route": "/assets/css/*", "headers": { "Cache-Control": "public, max-age=86400" } },
+    { "route": "/assets/js/*", "headers": { "Cache-Control": "public, max-age=86400" } },
+    { "route": "/assets/*", "headers": { "Cache-Control": "public, max-age=604800" } }
+  ],
+  "responseOverrides": {
+    "404": { "rewrite": "/404.html" }
+  },
+  "mimeTypes": {
+    ".svg": "image/svg+xml"
+  }
+}
