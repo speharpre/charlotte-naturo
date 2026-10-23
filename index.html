@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Charlotte Seynhaeve, naturopathe à Wavre</title>
-<meta name="description" content="Naturopathie et santé fonctionnelle à Wavre. Consultations enfant et adulte le samedi matin au Centre Curati : phytothérapie, aromathérapie, alimentation et hygiène de vie.">
+<meta name="description" content="Naturopathie et santé fonctionnelle à Wavre. Consultations enfant et adulte le samedi matin au Centre Curati : phytothérapie, aromathérapie, micronutrition, alimentation, hygiène de vie, analyses biologiques.">
 <meta property="og:title" content="Charlotte Seynhaeve, naturopathe à Wavre">
 <meta property="og:description" content="Rendre au corps l'énergie de guérir. Naturopathie et santé fonctionnelle, consultations le samedi matin à Wavre.">
 <meta property="og:type" content="website">
@@ -20,16 +20,17 @@
 
 <header class="nav" id="top">
   <a class="nav__brand" href="#top" aria-label="Charlotte Seynhaeve, accueil">
-    <svg class="nav__leaf" viewBox="0 0 32 32" aria-hidden="true"><path d="M27 5C15 5 7 12 6 24c0 1 .3 2 .7 3C9 18 14 13 21 10c-6 4-10 9-12 17 1 .4 2 .6 3 .6C23 27 28 17 27 5Z"/></svg>
+    <img class="nav__mark" src="assets/img/logo-mark.svg" alt="" width="36" height="36">
     <span>Charlotte <em>Seynhaeve</em></span>
   </a>
   <nav class="nav__links" aria-label="Navigation principale">
     <a href="#apropos">À propos</a>
     <a href="#naturopathie">La naturopathie</a>
+    <a href="#outils">Mes outils</a>
     <a href="#consultation">La consultation</a>
     <a href="#contact">Contact</a>
   </nav>
-  <a class="btn btn--small nav__cta" href="#contact">Prendre rendez-vous</a>
+  <a class="btn btn--small nav__cta" href="#contact" data-booking>Prendre rendez-vous</a>
   <button class="nav__burger" type="button" aria-expanded="false" aria-controls="mobilemenu" aria-label="Ouvrir le menu">
     <span></span><span></span>
   </button>
@@ -37,9 +38,10 @@
 <div class="mobilemenu" id="mobilemenu" hidden>
   <a href="#apropos">À propos</a>
   <a href="#naturopathie">La naturopathie</a>
+  <a href="#outils">Mes outils</a>
   <a href="#consultation">La consultation</a>
   <a href="#contact">Contact</a>
-  <a class="btn" href="#contact">Prendre rendez-vous</a>
+  <a class="btn" href="#contact" data-booking>Prendre rendez-vous</a>
 </div>
 
 <main id="main">
@@ -61,9 +63,9 @@
   <div class="hero__copy">
     <p class="hero__intro">Naturopathie et santé fonctionnelle, à Wavre</p>
     <h1 class="hero__title">Rendre au corps <span class="nowrap">l'énergie</span> de guérir.</h1>
-    <p class="hero__lead">Je vous reçois, enfants et adultes, pour comprendre la source de vos troubles et y répondre avec des remèdes naturels, une alimentation adaptée et un mode de vie qui vous ressemble.</p>
+    <p class="hero__lead">Je vous reçois, enfants et adultes, pour chercher la source de vos troubles et y répondre avec des remèdes naturels, une alimentation qui vous correspond et un mode de vie qui vous ressemble.</p>
     <div class="hero__actions">
-      <a class="btn" href="#contact">Prendre rendez-vous</a>
+      <a class="btn" href="#contact" data-booking>Prendre rendez-vous</a>
       <a class="link-arrow" href="#consultation">Pourquoi consulter</a>
     </div>
     <dl class="hero__facts">
@@ -102,9 +104,9 @@
       </div>
     </div>
     <div class="about__text">
-      <h2 class="h2 reveal">À propos de moi</h2>
-      <p class="reveal">Bonjour, et merci d'être arrivé jusqu'ici. Je m'appelle Charlotte, je vis en couple et je suis maman de deux enfants. Après dix ans en finance d'entreprise, et trop de journées passées à regarder par-dessus mon écran, j'ai décidé de me reconvertir.</p>
-      <p class="reveal">Fille et petite-fille de médecin généraliste, j'ai choisi le chemin de la santé, avec cette touche si généreuse qu'offre la naturopathie. C'est avec un solide bagage et beaucoup de passion que je vous reçois en consultation.</p>
+      <h2 class="h2 reveal">À mon propos</h2>
+      <p class="reveal">Bonjour et merci d'être arrivés sur mon site internet ! Je m'appelle Charlotte, j'ai 41 ans, je vis en couple et suis maman de deux enfants. Après 10 ans en finance d'entreprise, et de trop nombreuses journées à regarder au-delà de mon écran d'ordinateur, je décidais, il y a 4 ans, de me reconvertir. Fille et petite-fille de médecin généraliste, j'optais pour le chemin de la santé, avec cette touche si généreuse qu'offre la naturopathie.</p>
+      <p class="reveal">Formée dans une des écoles historiques de naturopathie de Belgique, l'IHMN (4 ans, Namur), à la phytothérapie à l'École des plantes (3 ans, Ath), et en ce moment en santé fonctionnelle auprès de DFM Formations (1 an, Paris), c'est avec ce solide bagage et beaucoup de passion que je vous reçois pour des consultations en naturopathie enfant et adulte.</p>
 
       <h3 class="h3 reveal">Mon parcours</h3>
       <ol class="timeline reveal">
@@ -129,35 +131,64 @@
 <section class="naturo" id="naturopathie">
   <div class="naturo__head">
     <h2 class="h2 reveal">La naturopathie</h2>
-    <p class="lead reveal">Avancer ensemble vers un mieux-être, grâce à des remèdes naturels et, au besoin, un rééquilibrage de l'alimentation et du mode de vie. La naturopathie offre de nombreuses options respectueuses du corps et de la Nature, et vise à rendre au corps l'énergie nécessaire pour guérir.</p>
+    <p class="lead reveal">Je vous propose d'avancer ensemble vers un mieux-être, grâce à des remèdes naturels et, au besoin, un rééquilibrage de l'alimentation et du mode de vie.</p>
+    <p class="reveal">La naturopathie propose en effet de nombreuses options thérapeutiques, respectueuses du corps et de la Nature : les plantes, bien sûr, les huiles essentielles, les vitamines ou minéraux par ailleurs. Elle prend également pour objectif de rendre au corps l'énergie nécessaire pour guérir. Quelques fois aussi, elle nous permet de réaliser que nous intoxiquons notre corps à notre insu, par des cosmétiques, des aliments qui ne nous conviennent pas, ou des pensées négatives !</p>
   </div>
 
   <blockquote class="pull reveal">
-    <p>Ma mission : une pratique rationnelle de la naturopathie, aidée par des bilans cliniques et biologiques précis, qui respecte la complexité de chaque histoire personnelle.</p>
-    <footer>La naturopathie complète la médecine générale. Elle ne la remplace pas.</footer>
+    <p>Ma mission est de vous offrir une pratique rationnelle de la naturopathie, aidée par des bilans cliniques et biologiques précis, tout en respectant la complexité de chaque histoire personnelle.</p>
+    <footer>Curieuse et perspicace, j'ai à cœur de chercher à comprendre la source des problèmes que vous rencontrez.</footer>
   </blockquote>
 
-  <h3 class="h3 reveal">Mes outils</h3>
+  <p class="naturo__more reveal">Je suis aussi convaincue que la naturopathie complète la médecine générale, par son approche plus intégrale de l'individu, plus préventive, et en partageant des notions d'hygiène vitale enrichissant le parcours médical de chacun.</p>
+</section>
+
+<!-- ===== MES OUTILS ===== -->
+<section class="outils" id="outils">
+  <div class="outils__head">
+    <h2 class="h2 reveal">Mes outils</h2>
+    <p class="lead reveal">Huit leviers, choisis selon votre histoire. Aucun ne remplace les autres : c'est leur combinaison qui fait la naturopathie.</p>
+  </div>
   <div class="tools">
     <article class="tool reveal">
       <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 56V30"/><path d="M32 34c-10 0-18-8-18-20 12 0 18 8 18 20Z"/><path d="M32 42c0-10 8-18 18-18 0 12-8 18-18 18Z"/><path d="M20 56h24"/></svg>
-      <h4>Phytothérapie</h4>
-      <p>La plante est le premier médicament du monde. Nombre de médicaments en pharmacie ont pour molécule active une molécule extraite d'une plante. En phytothérapie, c'est souvent le totum, la plante entière, qui est utilisé, pour garder toutes ses synergies. En tisane, alcoolature ou baume, les plantes restent des amies précieuses.</p>
+      <h3>Phytothérapie</h3>
+      <p>La plante est le premier médicament du monde. D'ailleurs, nombre de médicaments en pharmacie ont pour molécule active une molécule extraite d'une plante, et beaucoup ont fait l'objet d'études scientifiques où leurs effets ont pu être démontrés. Souvent, c'est le totum de la plante, son entièreté, qui est utilisé en phytothérapie. En tisane, alcoolature ou baume, les plantes restent des amies précieuses pour de nombreux maux !</p>
     </article>
     <article class="tool reveal">
       <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M26 8h12v10l8 14v20a6 6 0 0 1-6 6H24a6 6 0 0 1-6-6V32l8-14V8Z"/><path d="M22 40h20"/><circle cx="32" cy="47" r="3"/></svg>
-      <h4>Aromathérapie</h4>
-      <p>Les huiles essentielles sont des extraits concentrés de plantes aromatiques. Puissantes, elles demandent de vraies connaissances pour être choisies et dosées avec prudence, surtout chez l'enfant.</p>
+      <h3>Aromathérapie</h3>
+      <p>Assez connues du grand public, les huiles essentielles sont des extraits concentrés de plantes aromatiques. Elles sont souvent très puissantes et nécessitent certaines connaissances pour être manipulées avec prudence.</p>
     </article>
     <article class="tool reveal">
       <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><path d="M32 14v36M14 32h36"/><circle cx="32" cy="32" r="8"/></svg>
-      <h4>Micronutrition</h4>
-      <p>Vitamines, minéraux et oligo-éléments, choisis après un bilan précis, pour combler ce qui manque et soutenir ce qui fatigue.</p>
+      <h3>Micronutrition</h3>
+      <p>Les minéraux, vitamines et oligoéléments qui nous composent participent aux réactions biochimiques de notre corps. Une carence a donc souvent un impact sur plusieurs voies métaboliques. Sachant que les aliments ne sont plus aussi riches qu'avant, pour certains grands auteurs, se complémenter n'est plus une option.</p>
     </article>
     <article class="tool reveal">
       <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M12 36c0 12 9 20 20 20s20-8 20-20H12Z"/><path d="M20 36c2-10 8-16 12-16s10 6 12 16"/><path d="M32 20V8"/><path d="M32 12c4-4 8-4 12-2-2 4-6 6-12 2Z"/></svg>
-      <h4>Alimentation et hygiène de vie</h4>
-      <p>Parfois, nous intoxiquons notre corps à notre insu : cosmétiques, aliments qui ne nous conviennent pas, pensées négatives. Repérer ces sources et rééquilibrer le quotidien fait partie du travail.</p>
+      <h3>Alimentation</h3>
+      <p>Nos choix alimentaires ont un impact direct sur notre bien-être. Manger bio ? Local ? Quelles huiles ? Quid du gluten, des produits laitiers ? L'alimentation est un sujet fertile sur lequel les connaissances ont énormément évolué. Et pour cause, l'équilibre intestinal est au centre de la santé fonctionnelle. Une bonne santé digestive commence par une alimentation qui nous correspond, et à chaque individu correspond une diète particulière.</p>
+    </article>
+    <article class="tool reveal">
+      <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><path d="M32 18v14l9 6"/><path d="M12 12l6 6M52 12l-6 6"/></svg>
+      <h3>Hygiène de vie</h3>
+      <p>Grand classique de la naturopathie, des changements dans le mode de vie peuvent avoir un impact considérable sur la santé. Mieux dormir, faire plus d'exercice, se respecter, gérer le stress : quoi de plus essentiel ? Ici, rien à acheter, mais de la motivation et de la prise de conscience !</p>
+    </article>
+    <article class="tool reveal">
+      <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><rect x="22" y="8" width="20" height="40" rx="4"/><path d="M28 48v8h8v-8"/><path d="M12 22a20 20 0 0 1 0 20M52 22a20 20 0 0 0 0 20M18 27a12 12 0 0 1 0 10M46 27a12 12 0 0 0 0 10"/></svg>
+      <h3>Hygiène électromagnétique</h3>
+      <p>Un petit sujet hors cursus, mais qui me tient à cœur ! Il s'agit ici d'être électro-conscient quant à une exposition abusive aux ondes électromagnétiques. GSM, ordinateur, bluetooth dans la voiture, lampes de chevet : l'idée est de s'affranchir de chaque exposition inutile.</p>
+    </article>
+    <article class="tool reveal">
+      <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><path d="M26 8h12"/><path d="M28 8v16L16 46a6 6 0 0 0 5 10h22a6 6 0 0 0 5-10L36 24V8"/><path d="M22 38h20"/><circle cx="30" cy="46" r="2"/><circle cx="37" cy="48" r="1.5"/></svg>
+      <h3>Analyses biologiques</h3>
+      <p>L'analyse de résultats sanguins est un outil à part entière, qui peut confirmer les signes cliniques ou apporter des éléments nouveaux. La lecture de bilans fait partie de ma formation en naturopathie ainsi qu'en santé fonctionnelle. Dans le cadre d'une analyse en santé fonctionnelle, les marqueurs regardés seront souvent plus nombreux que lors d'une prise de sang « de routine », et les normes des laboratoires ne seront pas identiques non plus.</p>
+    </article>
+    <article class="tool reveal">
+      <svg class="tool__icon" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="8"/><path d="M32 8v10M32 46v10M8 32h10M46 32h10M15 15l7 7M42 42l7 7M49 15l-7 7M22 42l-7 7"/></svg>
+      <h3>Spiritualité</h3>
+      <p>Et si, à côté des chiffres, nous prenions le temps de voir plus loin, plus profond ? Qu'est-ce qui vous inspire ? Qu'est-ce qui vous donne du bonheur ? Quelles activités, quelles relations vous sont bénéfiques ? En quoi, en qui croyez-vous ? La vie est un cadeau tellement précieux, comment faire pour en profiter joyeusement ?</p>
     </article>
   </div>
 </section>
@@ -166,25 +197,25 @@
 <section class="consult" id="consultation">
   <div class="consult__intro">
     <h2 class="h2 reveal">La consultation</h2>
-    <p class="lead reveal">Pourquoi me consulter, concrètement ? Fatigue persistante, stress, inconforts digestifs, troubles du sommeil, douleurs, immunité en berne, problèmes cutanés, troubles féminins, envie de vieillir sereinement, ou simplement un bilan préventif d'hygiène de vie.</p>
-    <p class="reveal">La consultation couvre le bien-être physique, mais aussi psychique, mental et spirituel. Le corps n'est pas séparé de l'esprit qui l'occupe.</p>
+    <p class="lead reveal">Pourquoi me consulter, concrètement ? Fatigue persistante, stress et anxiété, inconforts digestifs, troubles du sommeil, douleurs, immunité en berne, problèmes cutanés, troubles féminins, envie de vieillir sereinement, ou encore un bilan préventif d'hygiène de vie !</p>
+    <p class="reveal">La consultation en naturopathie couvre le bien-être physique, mais aussi psychique, mental et spirituel. Le corps n'est pas séparé de l'esprit qui l'occupe, la naturopathie n'est pas la seule à le dire ;)</p>
   </div>
 
   <ol class="steps">
     <li class="step reveal">
       <span class="step__num">1</span>
       <h3>Première consultation</h3>
-      <p>Nous prenons le temps de parcourir votre histoire, surtout médicale. Ce contexte me permet de délivrer les premières pistes de solution.</p>
+      <p>L'occasion de récolter toutes les informations de votre histoire, surtout médicale. Elle me permet de connaître le contexte et de délivrer les premières pistes de solution.</p>
     </li>
     <li class="step reveal">
       <span class="step__num">2</span>
       <h3>Vos recommandations</h3>
-      <p>À la fin de chaque consultation, un document de recommandations vous est remis, sur papier ou par email. Un peu plus tard si des recherches complémentaires sont nécessaires.</p>
+      <p>À la fin de chaque consultation, un document avec des recommandations vous est envoyé, en papier ou directement par email, ou un peu après si des recherches supplémentaires sont nécessaires.</p>
     </li>
     <li class="step reveal">
       <span class="step__num">3</span>
-      <h3>Le suivi</h3>
-      <p>Les consultations suivantes s'intéressent à l'évolution de votre bien-être et de vos troubles, pour adapter ou compléter les recommandations initiales.</p>
+      <h3>Les consultations suivantes</h3>
+      <p>Elles sont axées sur l'évolution de votre bien-être et de vos troubles, et faites pour adapter ou compléter les recommandations initiales.</p>
     </li>
   </ol>
 
@@ -209,13 +240,14 @@
   <div class="contact__grid">
     <div class="contact__text">
       <h2 class="h2 reveal">Prenons rendez-vous</h2>
-      <p class="reveal">Pour fixer une consultation ou poser une question préliminaire, écrivez-moi ou appelez-moi. Je réponds généralement sous deux jours ouvrés.</p>
+      <p class="reveal">Pour fixer une consultation ou poser une question préliminaire, écrivez-moi ou appelez-moi.</p>
       <ul class="contact__list reveal">
-        <li><a href="mailto:info@charlotte-naturo.be">info@charlotte-naturo.be</a></li>
+        <li><a href="mailto:cseynhaeve@gmail.com">cseynhaeve@gmail.com</a></li>
         <li><a href="tel:+32476574129">+32 476 57 41 29</a></li>
       </ul>
+      <p class="contact__booking reveal" data-booking-note hidden>Vous pouvez aussi réserver directement en ligne.<br><a class="btn" href="#" data-booking target="_blank" rel="noopener">Réserver un créneau</a></p>
     </div>
-    <form class="form reveal" action="mailto:info@charlotte-naturo.be" method="post" enctype="text/plain" novalidate>
+    <form class="form reveal" action="mailto:cseynhaeve@gmail.com" method="post" enctype="text/plain" novalidate>
       <div class="form__row">
         <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
         <label>Nom<input type="text" name="nom" autocomplete="family-name" required></label>
@@ -232,15 +264,21 @@
 </main>
 
 <footer class="footer">
-  <p class="footer__name">Charlotte Seynhaeve</p>
-  <p class="footer__tag">Naturopathie et santé fonctionnelle</p>
+  <div class="footer__brand">
+    <img src="assets/img/logo-mark.svg" alt="" width="40" height="40">
+    <div>
+      <strong>Charlotte Seynhaeve</strong>
+      <span>Naturopathie et santé fonctionnelle, Wavre</span>
+    </div>
+  </div>
   <nav class="footer__links" aria-label="Liens de pied de page">
     <a href="#apropos">À propos</a>
     <a href="#naturopathie">La naturopathie</a>
+    <a href="#outils">Mes outils</a>
     <a href="#consultation">La consultation</a>
     <a href="#contact">Contact</a>
   </nav>
-  <p class="footer__legal">© <span data-year>2026</span> Charlotte Seynhaeve. Tous droits réservés. La naturopathie ne se substitue pas à un avis médical.</p>
+  <p class="footer__legal">© <span data-year>2026</span> Charlotte Seynhaeve. La naturopathie ne se substitue pas à un avis médical.</p>
 </footer>
 
 <script src="assets/js/main.js" defer></script>

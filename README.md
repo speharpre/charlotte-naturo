@@ -9,7 +9,7 @@ Hébergé sur Azure Static Web Apps (plan Free) : tout push sur `main` est publi
 - `index.html` : la page (hero, motifs de consultation, à propos, la naturopathie, la consultation, contact).
 - `assets/css/style.css` : feuille de style unique, mobile-first, tokens en tête de fichier.
 - `assets/js/main.js` : menu mobile, lien actif, apparitions au scroll, feuille du hero, validation du formulaire.
-- `assets/img/favicon.svg`, `assets/img/logo-original.png` (logo du site Wix, conservé en attendant un vectoriel).
+- `assets/img/logo-mark.svg` (fleur de calendula, le logo), `assets/img/logo.svg` (fleur + nom), `assets/img/favicon.svg`, `assets/img/logo-original.png` (ancien logo Wix, pour mémoire).
 - `404.html`, `staticwebapp.config.json` (en-têtes de sécurité, CSP, redirections des anciennes URL Wix, cache).
 
 Polices : Syne (titres, charte Wix) et Instrument Sans (texte), chargées depuis Google Fonts.
@@ -26,5 +26,5 @@ Puis ouvrir http://localhost:4321.
 
 - Brancher le formulaire sur un service d'envoi (Formspree, Azure Function ou similaire) : aujourd'hui il utilise `mailto:`.
 - Remplacer l'illustration "Photo à venir" par un portrait.
-- Fournir un logo vectoriel.
+- Réservation en ligne : coller l'URL publique de l'agenda Thérago dans `BOOKING_URL` en tête de `assets/js/main.js`.
 - Basculer le domaine charlotte-naturo.be de Wix vers la Static Web App (voir `docs/infrastructure-inventory.md`).

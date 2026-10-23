@@ -4,6 +4,18 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* Réservation en ligne : coller ici l'URL publique de l'agenda (Thérago).
+     Vide : les boutons "Prendre rendez-vous" mènent au formulaire de contact. */
+  var BOOKING_URL = "";
+  if (BOOKING_URL) {
+    document.querySelectorAll("[data-booking]").forEach(function (a) {
+      a.href = BOOKING_URL;
+      a.target = "_blank";
+      a.rel = "noopener";
+    });
+    document.querySelectorAll("[data-booking-note]").forEach(function (p) { p.hidden = false; });
+  }
+
   /* Nav : trait au scroll, menu mobile, lien actif */
   var nav = document.querySelector(".nav");
   var burger = document.querySelector(".nav__burger");
