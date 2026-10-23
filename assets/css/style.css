@@ -334,6 +334,9 @@ section { padding-inline: var(--gutter); }
 .contact__list a { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; text-decoration: none; border-bottom: 2px solid var(--orange); }
 .contact__list a:hover { color: var(--orange-deep); }
 .contact__booking { margin-top: var(--space-5); }
+.booking { grid-column: 1 / -1; background: var(--white); border-radius: var(--radius-md); padding: var(--space-6); box-shadow: var(--shadow-soft); }
+.booking .h3 { margin-top: 0; }
+.booking .therago-embed { max-width: 760px; }
 .contact__booking .btn { margin-top: var(--space-3); }
 
 .form { display: grid; gap: var(--space-4); background: var(--white); padding: var(--space-6); border-radius: var(--radius-md); box-shadow: var(--shadow-soft); }

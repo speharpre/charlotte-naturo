@@ -7,11 +7,29 @@
   /* Réservation en ligne : coller ici l'URL publique de l'agenda (Thérago).
      Vide : les boutons "Prendre rendez-vous" mènent au formulaire de contact. */
   var BOOKING_URL = "";
+  /* Widget Thérago (Réglages > Widget de réservation sur therago.be) :
+     token et id de prestation. Vides : la section Réserver reste masquée. */
+  var THERAGO = { token: "", service: "", locale: "fr" };
+  if (THERAGO.token) {
+    document.querySelectorAll("[data-therago-embed]").forEach(function (box) {
+      var mount = document.createElement("div");
+      mount.className = "therago-embed";
+      mount.setAttribute("data-token", THERAGO.token);
+      mount.setAttribute("data-locale", THERAGO.locale);
+      if (THERAGO.service) mount.setAttribute("data-service", THERAGO.service);
+      box.appendChild(mount);
+      box.hidden = false;
+    });
+    var s = document.createElement("script");
+    s.src = "https://therago.be/embed.js";
+    s.async = true;
+    document.body.appendChild(s);
+    if (!BOOKING_URL) BOOKING_URL = "#reserver";
+  }
   if (BOOKING_URL) {
     document.querySelectorAll("[data-booking]").forEach(function (a) {
       a.href = BOOKING_URL;
-      a.target = "_blank";
-      a.rel = "noopener";
+      if (BOOKING_URL.charAt(0) !== "#") { a.target = "_blank"; a.rel = "noopener"; }
     });
     document.querySelectorAll("[data-booking-note]").forEach(function (p) { p.hidden = false; });
   }
