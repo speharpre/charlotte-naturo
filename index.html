@@ -235,33 +235,40 @@
   </aside>
 </section>
 
-<!-- ===== CONTACT ===== -->
+<!-- ===== CONTACT / RÉSERVATION ===== -->
 <section class="contact" id="contact">
   <div class="contact__grid">
     <div class="contact__text">
       <h2 class="h2 reveal">Prenons rendez-vous</h2>
-      <p class="reveal">Pour fixer une consultation ou poser une question préliminaire, écrivez-moi ou appelez-moi.</p>
+      <p class="reveal">Choisissez votre consultation et réservez directement un créneau du samedi matin au Centre Curati. Vous recevez une confirmation par email et un rappel la veille.</p>
+      <p class="reveal">Pour une question préliminaire, écrivez-moi ou appelez-moi.</p>
       <ul class="contact__list reveal">
         <li><a href="mailto:cseynhaeve@gmail.com">cseynhaeve@gmail.com</a></li>
         <li><a href="tel:+32476574129">+32 476 57 41 29</a></li>
       </ul>
-      <p class="contact__booking reveal" data-booking-note hidden>Vous pouvez aussi réserver directement en ligne.<br><a class="btn" href="#" data-booking target="_blank" rel="noopener">Voir mon agenda</a></p>
     </div>
-    <div class="booking reveal" id="reserver" data-therago-embed hidden>
-      <h3 class="h3">Réserver un créneau</h3>
-      <!-- Le widget Thérago est injecté ici par main.js dès que THERAGO.token est renseigné. -->
+    <div class="booking reveal" id="reserver">
+      <ul class="offers" data-therago-offers>
+        <li class="offer">
+          <div class="offer__text">
+            <h3>Première consultation</h3>
+            <p>Votre histoire, surtout médicale, et les premières pistes.</p>
+            <span class="offer__meta">1 h 30, 70 €</span>
+          </div>
+          <a class="btn" href="https://therago.be/fr/t/charlotte-seynhaeve/book?serviceId=cmvkv5uqx0003o03wuc7skx90" target="_blank" rel="noopener">Réserver</a>
+        </li>
+        <li class="offer">
+          <div class="offer__text">
+            <h3>Consultation de suivi</h3>
+            <p>Évolution de votre bien-être, recommandations adaptées.</p>
+            <span class="offer__meta">1 h, 60 €</span>
+          </div>
+          <a class="btn" href="https://therago.be/fr/t/charlotte-seynhaeve/book?serviceId=cmvkv5urg0004o03wfc20tj4b" target="_blank" rel="noopener">Réserver</a>
+        </li>
+      </ul>
+      <div data-therago-embed hidden></div>
+      <p class="booking__note">La réservation se fait sur Thérago, l'agenda en ligne de mon cabinet. <a href="https://therago.be/fr/t/charlotte-seynhaeve" target="_blank" rel="noopener">Voir mon profil</a></p>
     </div>
-    <form class="form reveal" action="mailto:cseynhaeve@gmail.com" method="post" enctype="text/plain" novalidate>
-      <div class="form__row">
-        <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required></label>
-        <label>Nom<input type="text" name="nom" autocomplete="family-name" required></label>
-      </div>
-      <label>Email<input type="email" name="email" autocomplete="email" required></label>
-      <label>Votre demande<textarea name="message" rows="5" required placeholder="Décrivez votre demande ou vos questions"></textarea></label>
-      <p class="form__error" hidden>Merci de compléter tous les champs avant d'envoyer.</p>
-      <button class="btn btn--wide" type="submit">Envoyer ma demande</button>
-      <p class="form__note">Vos informations ne servent qu'à vous répondre.</p>
-    </form>
   </div>
 </section>
 

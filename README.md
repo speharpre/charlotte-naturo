@@ -24,7 +24,6 @@ Puis ouvrir http://localhost:4321.
 
 ## À faire
 
-- Brancher le formulaire sur un service d'envoi (Formspree, Azure Function ou similaire) : aujourd'hui il utilise `mailto:`.
 - Remplacer l'illustration "Photo à venir" par un portrait.
-- Réservation en ligne (Thérago) : renseigner `THERAGO.token` et `THERAGO.service` en tête de `assets/js/main.js` (Réglages > Widget de réservation sur therago.be) ; le widget apparaît dans la section Contact. `BOOKING_URL` permet sinon un simple lien vers le profil `https://therago.be/fr/t/<slug>`.
+- Réservation : liens directs vers l'agenda Thérago (https://therago.be/fr/t/charlotte-seynhaeve). Pour passer au widget intégré, renseigner `THERAGO.token` et `THERAGO.service` en tête de `assets/js/main.js` (Réglages > Widget de réservation).
 - Basculer le domaine charlotte-naturo.be de Wix vers la Static Web App (voir `docs/infrastructure-inventory.md`).

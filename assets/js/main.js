@@ -6,7 +6,7 @@
 
   /* Réservation en ligne : coller ici l'URL publique de l'agenda (Thérago).
      Vide : les boutons "Prendre rendez-vous" mènent au formulaire de contact. */
-  var BOOKING_URL = "";
+  var BOOKING_URL = "https://therago.be/fr/t/charlotte-seynhaeve/book?serviceId=cmvkv5uqx0003o03wuc7skx90";
   /* Widget Thérago (Réglages > Widget de réservation sur therago.be) :
      token et id de prestation. Vides : la section Réserver reste masquée. */
   var THERAGO = { token: "", service: "", locale: "fr" };
@@ -20,11 +20,12 @@
       box.appendChild(mount);
       box.hidden = false;
     });
+    document.querySelectorAll("[data-therago-offers]").forEach(function (ul) { ul.hidden = true; });
     var s = document.createElement("script");
     s.src = "https://therago.be/embed.js";
     s.async = true;
     document.body.appendChild(s);
-    if (!BOOKING_URL) BOOKING_URL = "#reserver";
+    BOOKING_URL = "#reserver";
   }
   if (BOOKING_URL) {
     document.querySelectorAll("[data-booking]").forEach(function (a) {
@@ -114,27 +115,6 @@
     }, { passive: true });
   }
 
-  /* Formulaire : validation simple avant l'envoi */
-  var form = document.querySelector(".form");
-  if (form) {
-    var error = form.querySelector(".form__error");
-    form.addEventListener("submit", function (e) {
-      var fields = form.querySelectorAll("[required]");
-      var ok = true;
-      fields.forEach(function (f) {
-        var valid = f.checkValidity() && f.value.trim() !== "";
-        f.classList.toggle("is-invalid", !valid);
-        if (!valid) ok = false;
-      });
-      if (!ok) {
-        e.preventDefault();
-        error.hidden = false;
-        form.querySelector(".is-invalid").focus();
-      } else {
-        error.hidden = true;
-      }
-    });
-  }
 
   /* Année du pied de page */
   var year = document.querySelector("[data-year]");
