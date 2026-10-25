@@ -4,7 +4,7 @@ Crée le profil thérapeute de Charlotte Seynhaeve en production, prêt à rése
 
 **Compte**
 - Nom : Charlotte Seynhaeve
-- Email : cseynhaeve@gmail.com
+- Email : info@charlotte-naturo.be
 - Téléphone : +32476574129
 - Rôle THERAPIST, locale fr. Mot de passe : aléatoire, jamais affiché (elle passera par « Mot de passe oublié »).
 - CGU et attestation praticien : ne pas les fabriquer, laisser à null (elle verra l'invite à sa première connexion).
