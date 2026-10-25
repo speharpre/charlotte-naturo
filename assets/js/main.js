@@ -116,6 +116,35 @@
   }
 
 
+  /* Mes outils : onglets (clic, flèches, Home/End) */
+  document.querySelectorAll("[data-tabs]").forEach(function (root) {
+    var tabs = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute("aria-controls")); });
+    function select(i, focus) {
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[k].hidden = !on;
+        if (on && focus) t.focus();
+      });
+      if (tabs[i].scrollIntoView && window.innerWidth < 900) {
+        tabs[i].scrollIntoView({ block: "nearest", inline: "center", behavior: reduceMotion ? "auto" : "smooth" });
+      }
+    }
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function () { select(i, false); });
+      t.addEventListener("keydown", function (e) {
+        var n = null;
+        if (e.key === "ArrowDown" || e.key === "ArrowRight") n = (i + 1) % tabs.length;
+        if (e.key === "ArrowUp" || e.key === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === "Home") n = 0;
+        if (e.key === "End") n = tabs.length - 1;
+        if (n !== null) { e.preventDefault(); select(n, true); }
+      });
+    });
+  });
+
   /* Année du pied de page */
   var year = document.querySelector("[data-year]");
   if (year) year.textContent = String(new Date().getFullYear());
