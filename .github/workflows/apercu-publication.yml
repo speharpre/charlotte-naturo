@@ -1,0 +1,158 @@
+# Aperçu, étape 2 sur 2 : publie dans un environnement d'aperçu (une adresse par pull request) les fichiers construits
+# par « Aperçu, construction ». Ce workflow est lu sur main, jamais dans la pull request : une personne qui propose
+# un changement ne peut ni le modifier ni toucher à l'identité Azure du site.
+# Il publie uniquement des fichiers statiques (pas d'API), puis écrit le lien de l'aperçu dans la pull request.
+# Le ménage des aperçus des pull requests fermées se fait ici et chaque nuit (l'offre gratuite en garde 3). La
+# suppression passe par un appel direct à Azure : `az staticwebapp environment delete` attend la fin de l'opération
+# avec un droit de lecture sur tout l'abonnement, que l'identité du site n'a pas.
+name: Aperçu, publication
+
+on:
+  workflow_run:
+    workflows: ["Aperçu, construction"]
+    types: [completed]
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+  pull-requests: write
+
+concurrency:
+  group: apercu
+  cancel-in-progress: false
+
+jobs:
+  publier:
+    name: Publier l'aperçu
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ vars.AZURE_CLIENT_ID != '' && github.event_name == 'workflow_run' &&
+          github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' &&
+          github.event.workflow_run.head_repository.full_name == github.repository }}
+    steps:
+      - name: Numéro de la pull request
+        id: pr
+        env:
+          NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+        run: |
+          set -euo pipefail
+          [[ "$NUMBER" =~ ^[0-9]{1,6}$ ]] || { echo "::error::pull request introuvable"; exit 1; }
+          echo "number=$NUMBER" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: apercu
+          path: apercu
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - name: Contrôle des fichiers reçus (statiques seulement)
+        run: |
+          set -euo pipefail
+          test -f apercu/index.html
+          find apercu -type f | head -2000 | wc -l
+          if find apercu -type f \( -name '*.sh' -o -name '*.py' -o -name 'function.json' -o -name 'host.json' \) | grep -q .; then
+            echo "::error::fichiers non statiques dans l'aperçu"; exit 1
+          fi
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Jeton de déploiement
+        id: swa
+        env:
+          SWA_NAME: ${{ vars.SWA_NAME }}
+          RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+        run: |
+          set -euo pipefail
+          token="$(az staticwebapp secrets list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query properties.apiKey -o tsv)"
+          echo "::add-mask::$token"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
+
+      - name: Ménage des aperçus des pull requests fermées
+        env:
+          SWA_NAME: ${{ vars.SWA_NAME }}
+          RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for env in $(az staticwebapp environment list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query "[?starts_with(name, 'pr')].name" -o tsv); do
+            n="${env#pr}"
+            [[ "$n" =~ ^[0-9]+$ ]] || continue
+            state="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$n" --jq .state 2>/dev/null || echo closed)"
+            if [ "$state" != "open" ]; then
+              echo "suppression de l'aperçu $env"
+              az rest --method delete -o none \
+                --url "/subscriptions/$(az account show --query id -o tsv)/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Web/staticSites/$SWA_NAME/builds/$env?api-version=2022-09-01" || true
+            fi
+          done
+
+      - name: Publier
+        id: deploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
+          action: upload
+          app_location: apercu
+          output_location: ''
+          skip_app_build: true
+          deployment_environment: pr${{ steps.pr.outputs.number }}
+
+      - name: Lien dans la pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ steps.pr.outputs.number }}
+          URL: ${{ steps.deploy.outputs.static_web_app_url }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$URL" =~ ^https://[a-z0-9.-]+\.azurestaticapps\.net/?$ ]] || { echo "::error::adresse d'aperçu inattendue : $URL"; exit 1; }
+          body="$(printf '%s\n\n%s\n\n%s' \
+            "**Aperçu prêt** : $URL" \
+            "Version ${SHA:0:7}. L'adresse reste la même à chaque nouvelle correction de cette pull request. Le site officiel n'a pas changé : il ne change qu'à la fusion." \
+            "L'aperçu montre les pages seulement : un formulaire relié à une API n'y fonctionne pas.")"
+          # Un seul commentaire par pull request, mis à jour à chaque version.
+          id="$(gh api "repos/$GITHUB_REPOSITORY/issues/$NUMBER/comments" --jq '[.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("**Aperçu prêt**")))][0].id // empty')"
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -f body="$body" >/dev/null
+          else
+            gh api -X POST "repos/$GITHUB_REPOSITORY/issues/$NUMBER/comments" -f body="$body" >/dev/null
+          fi
+          echo "Aperçu : $URL"
+
+  menage:
+    name: Ménage des aperçus
+    runs-on: ubuntu-latest
+    if: ${{ vars.AZURE_CLIENT_ID != '' && github.event_name != 'workflow_run' }}
+    steps:
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Supprimer les aperçus des pull requests fermées
+        env:
+          SWA_NAME: ${{ vars.SWA_NAME }}
+          RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for env in $(az staticwebapp environment list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query "[?starts_with(name, 'pr')].name" -o tsv); do
+            n="${env#pr}"
+            [[ "$n" =~ ^[0-9]+$ ]] || continue
+            state="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$n" --jq .state 2>/dev/null || echo closed)"
+            if [ "$state" != "open" ]; then
+              echo "suppression de l'aperçu $env"
+              az rest --method delete -o none \
+                --url "/subscriptions/$(az account show --query id -o tsv)/resourceGroups/$RESOURCE_GROUP/providers/Microsoft.Web/staticSites/$SWA_NAME/builds/$env?api-version=2022-09-01" || true
+            fi
+          done

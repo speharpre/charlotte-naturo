@@ -1,0 +1,33 @@
+# Aperçu, étape 1 sur 2 : construit les fichiers publics d'une pull request, SANS aucun droit (pas d'Azure, pas de
+# secret, lecture seule du dépôt). Le code d'une pull request n'est jamais exécuté avec la clé du site.
+# L'étape 2 (apercu-publication.yml, définie sur main) publie ces fichiers dans un environnement d'aperçu.
+name: Aperçu, construction
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  construire:
+    name: Construire l'aperçu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Fichiers publics (sans .git, .github, notes internes ni API)"
+        run: |
+          set -euo pipefail
+          mkdir -p dist/app
+          rsync -a --exclude .git --exclude .github --exclude api --exclude node_modules \
+            --exclude _source --exclude design --exclude docs --exclude CLAUDE.md --exclude README.md ./ dist/app/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apercu
+          path: dist/app
+          retention-days: 3
+          if-no-files-found: error

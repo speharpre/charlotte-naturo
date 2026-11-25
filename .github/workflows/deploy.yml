@@ -1,39 +1,70 @@
-name: Deploy to Azure Static Web Apps
+# Publication du site vitrine sur Azure Static Web Apps, à chaque push sur main.
+# Authentification Azure par OIDC (identité du site, droits limités à sa Static Web App) ; le jeton de
+# déploiement est lu à chaque exécution, jamais stocké. Tant que les variables du dépôt ne sont pas posées
+# (juste après la création depuis le modèle), le workflow ne fait rien.
+name: Deploy
 
 on:
   push:
     branches: [main]
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches: [main]
   workflow_dispatch:
 
 permissions:
+  id-token: write
   contents: read
-  pull-requests: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
-    if: github.event_name != 'pull_request' || github.event.action != 'closed'
+    name: Production
     runs-on: ubuntu-latest
-    name: Deploy
+    # Seul le propriétaire (variable DEPLOY_OWNER) déclenche une publication : une personne invitée sur le dépôt
+    # propose ses changements par pull request, et la fusion par le propriétaire publie.
+    if: ${{ vars.AZURE_CLIENT_ID != '' && github.triggering_actor == vars.DEPLOY_OWNER }}
     steps:
       - uses: actions/checkout@v4
-      - uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          action: upload
-          app_location: "/"
-          output_location: ""
-          skip_app_build: true
 
-  close_preview:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close preview environment
-    steps:
-      - uses: Azure/static-web-apps-deploy@v1
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          action: close
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Jeton de déploiement
+        id: swa
+        env:
+          SWA_NAME: ${{ vars.SWA_NAME }}
+          RESOURCE_GROUP: ${{ vars.RESOURCE_GROUP }}
+        run: |
+          set -euo pipefail
+          token="$(az staticwebapp secrets list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query properties.apiKey -o tsv)"
+          echo "::add-mask::$token"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
+
+      - name: Publier
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
+          action: upload
+          app_location: /
+          output_location: ''
+          skip_app_build: true
+          skip_api_build: true
+
+      - name: Test du site
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 20); do
+            code="$(curl -s -o /dev/null -m 20 -w '%{http_code}' "$SITE_URL" || true)"
+            echo "essai $i : $code"
+            if [ "$code" = "200" ]; then exit 0; fi
+            sleep 10
+          done
+          echo "::error::Le site ne répond pas après publication."
+          exit 1
